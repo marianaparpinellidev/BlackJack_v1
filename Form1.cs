@@ -234,7 +234,7 @@ namespace BlackJack_v1
                 MessageBox.Show("BlackJack! Você perdeu!");
                 novo_jogo_Click(sender, e);
             }
-            else if(dealerPoints > playerPoints && playerPoints < 21)
+            else if(dealerPoints > playerPoints && playerPoints < 21 && dealerPoints > 21)
             {
                 MessageBox.Show("Você perdeu!");
                 novo_jogo_Click(sender, e);
