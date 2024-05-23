@@ -17,11 +17,6 @@ namespace BlackJack_v1
             InitializeComponent();
             InitializeGame();
             StyleComponents();
-
-            // Adicionar eventos de clique
-            novo_jogo.Click += NovoJogo_Click;
-            pedir_carta.Click += PedirCarta_Click;
-            parar.Click += Parar_Click;
         }
 
         private void InitializeGame()
@@ -94,12 +89,21 @@ namespace BlackJack_v1
                 Properties.Resources._52,
             };
 
-            // Definir Tags para cada imagem (chat)
-            foreach (var image in cardImages)
+            // Definir Tags para cada imagem
+            string[] cardNames = new string[]
             {
-                image.Tag = image.ToString().Replace("Properties.Resources.", "");
+                "_01", "_02", "_03", "_04", "_05", "_06", "_07", "_08", "_09", "_10", "_11", "_12", "_13",
+                "_14", "_15", "_16", "_17", "_18", "_19", "_20", "_21", "_22", "_23", "_24", "_25", "_26",
+                "_27", "_28", "_29", "_30", "_31", "_32", "_33", "_34", "_35", "_36", "_37", "_38", "_39",
+                "_40", "_41", "_42", "_43", "_44", "_45", "_46", "_47", "_48", "_49", "_50", "_51", "_52"
+            };
+
+            for (int i = 0; i < cardImages.Count; i++)
+            {
+                cardImages[i].Tag = cardNames[i];
             }
-            //Aleatorizando
+
+            // Aleatorizando
             rng = new Random();
             playerPoints = dealerPoints = 0;
         }
@@ -127,48 +131,115 @@ namespace BlackJack_v1
         {
             playerPointsBox.Text = playerPoints.ToString();
         }
+
+        private void UpdateDealerPoints(int dealerPoints, TextBox dealerPointsBox)
+        {
+            dealerPointsBox.Text = dealerPoints.ToString();
+        }
+
         //Jogador pegar as cartas
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            TrocarCarta(cartas_distribuicao, ref playerPoints, pontos_jogador);
         }
         //Dealer pegar as cartas
         private void pictureBox2_Click(object sender, EventArgs e)
         {
-            TrocarCarta(cartas_distribuicao, ref dealerPoints, pontos_dealer);
         }
         //trocar as cartas
-        private void TrocarCarta(PictureBox pictureBox, ref int playerPoints, TextBox playerPointsBox)
+        private void TrocarCartaJogador(PictureBox pictureBox, ref int player_points, TextBox playerPointsBox)
         {
             Shuffle(cardImages);
             if (cardImages.Count > 0)
             {
                 pictureBox.Image = cardImages[0];
-                playerPoints += CardValueCalculator.CalculateCardPoints(cardImages[0]);
+                if (CardValueCalculator.CalculateCardPoints(cardImages[0]) == 1 && playerPoints <= 10)
+                {
+                    playerPoints += 11;
+                }
+                else
+                {
+                    playerPoints += CardValueCalculator.CalculateCardPoints(cardImages[0]);
+                }
                 UpdatePlayerPoints(playerPoints, playerPointsBox);
             }
         }
-
-        private void NovoJogo_Click(object sender, EventArgs e)
+        
+        private void TrocarCartaDealer(PictureBox pictureBox, ref int dealer_points, TextBox dealerPointsBox)
         {
-            // Reiniciar o jogo
+            Shuffle(cardImages);
+            if (cardImages.Count <= 0) return;
+            pictureBox.Image = cardImages[0];
+            if(CardValueCalculator.CalculateCardPoints(cardImages[0]) == 1 && dealerPoints <= 10)
+            {
+                dealerPoints += 11;
+            }
+            else
+            {
+                dealerPoints += CardValueCalculator.CalculateCardPoints(cardImages[0]);
+            }
+            UpdateDealerPoints(dealerPoints, dealerPointsBox);
+        }
+        private void novo_jogo_Click(object sender, EventArgs e)
+        {
             playerPoints = dealerPoints = 0;
             pontos_jogador.Text = "0";
             pontos_dealer.Text = "0";
             mao_jogador.Image = null;
             mao_dealer.Image = null;
         }
-        //Comprar carta
-        private void PedirCarta_Click(object sender, EventArgs e)
+
+        private void parar_Click_1(object sender, EventArgs e)
         {
-            // Ideia de pedir carta para o jogador
-            TrocarCarta(mao_jogador, ref playerPoints, pontos_jogador);
+            if(playerPoints > dealerPoints)
+            {
+                MessageBox.Show("Você ganhou!");
+                novo_jogo_Click(sender, e);
+            }
+            else if(playerPoints < dealerPoints)
+            {
+                MessageBox.Show("Você perdeu!");
+                novo_jogo_Click(sender, e);
+            }
+            else
+            {
+                MessageBox.Show("Empate!");
+                novo_jogo_Click(sender, e);
+            }
+            novo_jogo_Click(sender, e);
         }
 
-        private void Parar_Click(object sender, EventArgs e)
+        private void pedir_carta_Click(object sender, EventArgs e)
         {
-            // Ideia para finalizar a rodada e comparar pontos
-            MessageBox.Show("Jogo finalizado. Dealer: " + dealerPoints + " Jogador: " + playerPoints);
+            TrocarCartaJogador(mao_jogador, ref playerPoints, pontos_jogador);
+            TrocarCartaDealer(mao_dealer, ref dealerPoints, pontos_dealer);
+
+            if (playerPoints > 21)
+            {
+                MessageBox.Show("Você perdeu!");
+                novo_jogo_Click(sender, e);
+            }
+            else if (playerPoints == 21)
+            {
+                MessageBox.Show("BlackJack! Você ganhou!");
+                novo_jogo_Click(sender, e);
+            }
+
+            if(dealerPoints > 21)
+            {
+                MessageBox.Show("Você ganhou o dealer estourou!");
+                novo_jogo_Click(sender, e);
+            }
+            else if (dealerPoints == 21)
+            {
+                MessageBox.Show("BlackJack! Você perdeu!");
+                novo_jogo_Click(sender, e);
+            }
+            else if(dealerPoints > playerPoints && playerPoints < 21)
+            {
+                MessageBox.Show("Você perdeu!");
+                novo_jogo_Click(sender, e);
+            }
+            
         }
     }
     //Calculo-Biblioteca de imagens para valores
@@ -178,7 +249,7 @@ namespace BlackJack_v1
         {
             // Espadas
          
-               {"_01", 1 },
+               {"_01", 1  },
                {"_02", 2 },
                {"_03", 3 },
                {"_04", 4 },

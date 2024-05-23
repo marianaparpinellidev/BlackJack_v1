@@ -67,6 +67,7 @@
             novo_jogo.TabIndex = 0;
             novo_jogo.Text = "Novo Jogo";
             novo_jogo.UseVisualStyleBackColor = false;
+            novo_jogo.Click += novo_jogo_Click;
             // 
             // pedir_carta
             // 
@@ -86,6 +87,7 @@
             pedir_carta.Text = "Pedir Carta";
             pedir_carta.TextImageRelation = TextImageRelation.ImageAboveText;
             pedir_carta.UseVisualStyleBackColor = false;
+            pedir_carta.Click += pedir_carta_Click;
             // 
             // parar
             // 
@@ -104,6 +106,7 @@
             parar.Text = "Parar";
             parar.UseVisualStyleBackColor = false;
             parar.UseWaitCursor = true;
+            parar.Click += parar_Click_1;
             // 
             // jogador
             // 
@@ -115,7 +118,6 @@
             jogador.Size = new Size(77, 22);
             jogador.TabIndex = 3;
             jogador.Text = "Jogador";
-            jogador.Click += pontuacao_jogador_Click;
             // 
             // dealer
             // 

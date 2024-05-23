@@ -396,3 +396,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/.idea/.idea.BlackJack_v1/.idea/indexLayout.xml
+/.idea/.idea.BlackJack_v1/.idea/projectSettingsUpdater.xml
+/.idea/.idea.BlackJack_v1/.idea/vcs.xml
+/.idea/.idea.BlackJack_v1/.idea/workspace.xml
+/.editorconfig
